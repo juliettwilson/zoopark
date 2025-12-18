@@ -8,6 +8,7 @@ import org.example.zoopark.repository.KeeperRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,6 @@ public class KeeperServiceImpl implements KeeperService {
         Keeper existing = keeperRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Keeper not found with id " + id));
 
-        // Обновляем поля
         existing.setName(keeperDto.getName());
         existing.setExperience(keeperDto.getExperience());
 
@@ -50,9 +50,10 @@ public class KeeperServiceImpl implements KeeperService {
     }
 
     @Override
-    public void delete(Long id) {
+    public BooleanSupplier delete(Long id) {
         Keeper existing = keeperRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Keeper not found with id " + id));
         keeperRepository.delete(existing);
+        return null;
     }
 }
