@@ -1,14 +1,14 @@
 package org.example.zoopark.service;
 
+import org.example.zoopark.dto.KeeperDto;
 import org.example.zoopark.entity.Keeper;
 
 import java.util.List;
 
 public interface KeeperService {
-    Keeper save(Keeper keeper);
-
-    List<Keeper> findAll();
-
-    Keeper findById(Long id);
-    void deleteById(Long id);
+    KeeperDto create(KeeperDto keeperDto);
+    List<KeeperDto> getAll();
+    KeeperDto getById(Long id);
+    KeeperDto update(Long id, KeeperDto keeperDto);
+    void delete(Long id);
 }
