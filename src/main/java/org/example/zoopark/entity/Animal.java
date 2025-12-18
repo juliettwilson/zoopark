@@ -24,4 +24,9 @@ public class Animal {
 
     @ManyToMany
     private Set<Keeper> keepers = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "enclosure_id")
+    private Enclosure enclosure;
+
 }
