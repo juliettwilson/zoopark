@@ -10,5 +10,5 @@ public interface AnimalService {
     List<AnimalDto> getAll();
     AnimalDto getById(Long id);
     AnimalDto update(Long id, AnimalDto animalDto);
-    BooleanSupplier delete(Long id);
+    void  delete(Long id);
 }

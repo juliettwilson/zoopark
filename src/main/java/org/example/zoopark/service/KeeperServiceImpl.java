@@ -50,10 +50,9 @@ public class KeeperServiceImpl implements KeeperService {
     }
 
     @Override
-    public BooleanSupplier delete(Long id) {
+    public void delete(Long id) {
         Keeper existing = keeperRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Keeper not found with id " + id));
         keeperRepository.delete(existing);
-        return null;
     }
 }

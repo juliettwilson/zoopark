@@ -10,5 +10,5 @@ public interface KeeperService {
     List<KeeperDto> getAll();
     KeeperDto getById(Long id);
     KeeperDto update(Long id, KeeperDto keeperDto);
-    BooleanSupplier delete(Long id);
+    void delete(Long id);
 }
