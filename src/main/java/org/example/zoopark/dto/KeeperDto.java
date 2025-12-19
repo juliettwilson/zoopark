@@ -11,6 +11,6 @@ public class KeeperDto {
     private Long id;
     private String name;
     private int experience;
-    private Set<Long> animalIds;
+    private Set<AnimalDto> animalIds;
 
 }

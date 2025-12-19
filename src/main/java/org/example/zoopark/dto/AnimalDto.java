@@ -3,6 +3,7 @@ package org.example.zoopark.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -12,6 +13,6 @@ public class AnimalDto {
     private String name;
     private String species;
     private int age;
-    private Set<Long> keeperIds;
+    private List<KeeperDto> keeperIds;
 
 }
