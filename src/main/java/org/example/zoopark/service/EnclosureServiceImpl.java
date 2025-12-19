@@ -50,9 +50,10 @@ public class EnclosureServiceImpl implements EnclosureService {
     }
 
     @Override
-    public void delete(Long id) {
+    public BooleanSupplier delete(Long id) {
         Enclosure existing = enclosureRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Enclosure not found with id " + id));
         enclosureRepository.delete(existing);
+        return null;
     }
 }

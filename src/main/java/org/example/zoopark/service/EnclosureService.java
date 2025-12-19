@@ -9,5 +9,5 @@ public interface EnclosureService {
     List<EnclosureDto> getAll();
     EnclosureDto getById(Long id);
     EnclosureDto update(Long id, EnclosureDto enclosureDto);
-    void delete(Long id);
+    BooleanSupplier delete(Long id);
 }
