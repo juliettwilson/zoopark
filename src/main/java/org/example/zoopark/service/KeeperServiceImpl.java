@@ -42,7 +42,6 @@ public class KeeperServiceImpl implements KeeperService {
         Keeper existing = keeperRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Keeper not found with id " + id));
 
-        // Обновляем поля
         existing.setName(keeperDto.getName());
         existing.setExperience(keeperDto.getExperience());
 

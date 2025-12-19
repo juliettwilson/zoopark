@@ -1,7 +1,6 @@
 package org.example.zoopark.service;
 
 import org.example.zoopark.dto.KeeperDto;
-import org.example.zoopark.entity.Keeper;
 
 import java.util.List;
 import java.util.function.BooleanSupplier;
