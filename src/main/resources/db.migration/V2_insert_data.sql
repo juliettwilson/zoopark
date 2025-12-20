@@ -1,18 +1,18 @@
 INSERT INTO enclosures (name, type) VALUES
-                                        ('Savannah Zone', 'Open Area'),
-                                        ('Big Cats Zone', 'Closed Area'),
-                                        ('Herbivores Zone', 'Open Area');
+                                        ('Теплая зона', 'Открытый участок'),
+                                        ('Холодная зона', 'Закрытый участок'),
+                                        ('Нейтральная зона', 'Открытый участок');
 
 INSERT INTO animals (animal_name, animal_species, animal_age, enclosure_id) VALUES
-                                                                                ('Lion', 'Panthera leo', 5, 2),
-                                                                                ('Tiger', 'Panthera tigris', 4, 2),
-                                                                                ('Elephant', 'Loxodonta africana', 10, 1),
-                                                                                ('Zebra', 'Equus quagga', 6, 3);
+                                                                                ('Арыстан', 'Panthera leo', 5, 2),
+                                                                                ('Жолбарыс', 'Panthera tigris', 4, 2),
+                                                                                ('Слон', 'Loxodonta africana', 10, 1),
+                                                                                ('Зебра', 'Equus quagga', 6, 3);
 
 INSERT INTO keepers (keeper_name, expr_year) VALUES
-                                                 ('John Smith', 7),
-                                                 ('Alice Brown', 5),
-                                                 ('Michael Green', 10);
+                                                 ('Смотритель Баглан', 7),
+                                                 ('Смотритель Фарида', 5),
+                                                 ('Смотритель Жандос', 10);
 
 
 INSERT INTO animals_keepers (animal_id, keeper_id) VALUES
