@@ -3,7 +3,10 @@ package org.example.zoopark.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,13 +18,15 @@ public class Animal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "animal_name")
     private String name;
-    @Column(name = "animal_species")
     private String species;
-    @Column(name = "animal_age")
     private int age;
 
     @ManyToMany
-    private Set<Keeper> keepers = new HashSet<>();
+    private List<Keeper> keepers = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "enclosure_id")
+    private Enclosure enclosure;
+
 }

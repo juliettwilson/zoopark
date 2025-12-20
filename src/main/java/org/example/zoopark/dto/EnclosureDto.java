@@ -4,15 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
-public class AnimalDto {
+public class EnclosureDto {
     private Long id;
     private String name;
-    private String species;
-    private int age;
-    private List<KeeperDto> keeperIds;
-
+    private String type;
+    private List<AnimalDto> animals;
 }
