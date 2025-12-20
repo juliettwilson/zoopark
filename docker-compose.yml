@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: zoopark_postgres
+    environment:
+      POSTGRES_DB: zoo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: zoopark_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/zoo
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ai
+
+volumes:
+  pgdata:
+
+
+
+
+
