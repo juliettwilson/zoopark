@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,5 +24,5 @@ public class Enclosure {
     private String type;
 
     @OneToMany(mappedBy = "enclosure")
-    private List<Animal> animals;
+    private List<Animal> animals = new ArrayList<>();
 }

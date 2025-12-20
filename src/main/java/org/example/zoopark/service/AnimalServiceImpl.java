@@ -54,6 +54,6 @@ public class AnimalServiceImpl implements AnimalService {
         Animal existing = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Animal not found with id " + id));
         animalRepository.delete(existing);
-        return null;
+        return () -> true;
     }
 }

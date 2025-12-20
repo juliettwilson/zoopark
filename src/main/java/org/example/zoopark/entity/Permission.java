@@ -1,5 +1,6 @@
 package org.example.zoopark.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +24,7 @@ public class Permission implements GrantedAuthority {
     public String getAuthority() {
         return name;
     }
+
+
+
 }

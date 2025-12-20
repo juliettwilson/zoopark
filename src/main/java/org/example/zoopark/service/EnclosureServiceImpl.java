@@ -6,12 +6,14 @@ import org.example.zoopark.entity.Enclosure;
 import org.example.zoopark.mapper.EnclosureMapper;
 import org.example.zoopark.repository.EnclosureRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EnclosureServiceImpl implements EnclosureService {
 
     private final EnclosureRepository enclosureRepository;
@@ -54,6 +56,6 @@ public class EnclosureServiceImpl implements EnclosureService {
         Enclosure existing = enclosureRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Enclosure not found with id " + id));
         enclosureRepository.delete(existing);
-        return null;
+        return () -> true;
     }
 }

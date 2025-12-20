@@ -1,6 +1,7 @@
 package org.example.zoopark.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.zoopark.dto.UserDto;
 import org.example.zoopark.entity.UserModel;
 import org.example.zoopark.service.MyUserService;
 import org.springframework.http.HttpStatus;
@@ -16,18 +17,13 @@ public class UserController {
     private final MyUserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserModel>> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserModel> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getById(id));
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<UserModel> registerUser(@RequestBody UserModel user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(user));
     }
 
     @PutMapping("/{id}")

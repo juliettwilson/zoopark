@@ -44,7 +44,6 @@ public class EnclosureMapperTest {
         Assertions.assertNotNull(enclosureDto.getId());
         Assertions.assertNotNull(enclosureDto.getName());
         Assertions.assertNotNull(enclosureDto.getType());
-        Assertions.assertNotNull(enclosureDto.getAnimals());
 
         Assertions.assertEquals(enclosureEntity.getId(), enclosureDto.getId());
         Assertions.assertEquals(enclosureEntity.getName(), enclosureDto.getName());

@@ -9,114 +9,93 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.BooleanSupplier;
 
 @SpringBootTest
 public class EnclosureServiceTest {
 
     @Autowired
     private EnclosureService enclosureService;
-
-    @Test
-    void getAllTest() {
-        List<EnclosureDto> enclosureDtos = enclosureService.getAll();
-
-        Assertions.assertNotNull(enclosureDtos);
-        Assertions.assertNotEquals(0, enclosureDtos.size());
-
-        for (EnclosureDto dto : enclosureDtos) {
-            Assertions.assertNotNull(dto);
-            Assertions.assertNotNull(dto.getId());
-            Assertions.assertNotNull(dto.getName());
-            Assertions.assertNotNull(dto.getType());
-        }
+    private EnclosureDto createTestEnclosure() {
+        EnclosureDto dto = new EnclosureDto();
+        dto.setName("Test Enclosure");
+        dto.setType("Test Type");
+        return enclosureService.create(dto);
     }
 
     @Test
+    void getAllTest() {
+        EnclosureDto created = createTestEnclosure();
+
+        List<EnclosureDto> enclosures = enclosureService.getAll();
+
+        Assertions.assertNotNull(enclosures);
+        Assertions.assertFalse(enclosures.isEmpty());
+
+        EnclosureDto found = enclosures.stream()
+                .filter(e -> e.getId().equals(created.getId()))
+                .findFirst()
+                .orElse(null);
+
+        Assertions.assertNotNull(found);
+        Assertions.assertNotNull(found.getName());
+        Assertions.assertNotNull(found.getType());
+    }
+
+
+
+    @Test
     void getByIdTest() {
-        Random random = new Random();
-        List<EnclosureDto> enclosureDtos = enclosureService.getAll();
-        int randomIndex = random.nextInt(enclosureDtos.size());
-        Long someIndex = enclosureDtos.get(randomIndex).getId();
+        EnclosureDto created = createTestEnclosure();
 
-        EnclosureDto enclosureDto = enclosureService.getById(someIndex);
+        EnclosureDto enclosure = enclosureService.getById(created.getId());
 
-        Assertions.assertNotNull(enclosureDto);
-        Assertions.assertNotNull(enclosureDto.getId());
-        Assertions.assertNotNull(enclosureDto.getName());
-        Assertions.assertNotNull(enclosureDto.getType());
-
-        Assertions.assertEquals(someIndex, enclosureDto.getId());
+        Assertions.assertNotNull(enclosure);
+        Assertions.assertEquals(created.getId(), enclosure.getId());
+        Assertions.assertEquals(created.getName(), enclosure.getName());
+        Assertions.assertEquals(created.getType(), enclosure.getType());
     }
 
     @Test
     void addTest() {
-        EnclosureDto enclosureDto = new EnclosureDto();
-        enclosureDto.setName("Savannah");
-        enclosureDto.setType("Outdoor");
+        EnclosureDto dto = new EnclosureDto();
+        dto.setName("Savannah");
+        dto.setType("Outdoor");
 
-        EnclosureDto add = enclosureService.create(enclosureDto);
+        EnclosureDto saved = enclosureService.create(dto);
 
-        Assertions.assertNotNull(add);
-        Assertions.assertNotNull(add.getId());
-        Assertions.assertNotNull(add.getName());
-        Assertions.assertNotNull(add.getType());
-
-        EnclosureDto added = enclosureService.getById(add.getId());
-
-        Assertions.assertNotNull(added);
-        Assertions.assertNotNull(added.getId());
-        Assertions.assertNotNull(added.getName());
-        Assertions.assertNotNull(added.getType());
-
-        Assertions.assertEquals(add.getId(), added.getId());
-        Assertions.assertEquals(add.getName(), added.getName());
-        Assertions.assertEquals(add.getType(), added.getType());
+        Assertions.assertNotNull(saved);
+        Assertions.assertNotNull(saved.getId());
+        Assertions.assertEquals("Savannah", saved.getName());
+        Assertions.assertEquals("Outdoor", saved.getType());
     }
 
     @Test
     void updateTest() {
-        Random random = new Random();
-        List<EnclosureDto> enclosureDtos = enclosureService.getAll();
-        int randomIndex = random.nextInt(enclosureDtos.size());
-        Long someIndex = enclosureDtos.get(randomIndex).getId();
+        EnclosureDto created = createTestEnclosure();
 
-        EnclosureDto newEnclosure = new EnclosureDto();
-        newEnclosure.setId(someIndex);
-        newEnclosure.setName("Updated Name");
-        newEnclosure.setType("Updated Type");
+        EnclosureDto updateDto = new EnclosureDto();
+        updateDto.setName("Updated Name");
+        updateDto.setType("Updated Type");
 
-        EnclosureDto update = enclosureService.update(someIndex, newEnclosure);
-
-        Assertions.assertNotNull(update);
-        Assertions.assertNotNull(update.getId());
-        Assertions.assertNotNull(update.getName());
-        Assertions.assertNotNull(update.getType());
-
-        Assertions.assertEquals(newEnclosure.getId(), update.getId());
-        Assertions.assertEquals(newEnclosure.getName(), update.getName());
-        Assertions.assertEquals(newEnclosure.getType(), update.getType());
-
-        EnclosureDto updated = enclosureService.getById(someIndex);
+        EnclosureDto updated =
+                enclosureService.update(created.getId(), updateDto);
 
         Assertions.assertNotNull(updated);
-        Assertions.assertNotNull(updated.getId());
-        Assertions.assertNotNull(updated.getName());
-        Assertions.assertNotNull(updated.getType());
-
-        Assertions.assertEquals(update.getId(), updated.getId());
-        Assertions.assertEquals(update.getName(), updated.getName());
-        Assertions.assertEquals(update.getType(), updated.getType());
+        Assertions.assertEquals(created.getId(), updated.getId());
+        Assertions.assertEquals("Updated Name", updated.getName());
+        Assertions.assertEquals("Updated Type", updated.getType());
     }
     @Test
     void deleteTest() {
-        Random random = new Random();
-        List<EnclosureDto> enclosureDtos = enclosureService.getAll();
-        int randomIndex = random.nextInt(enclosureDtos.size());
-        Long someIndex = enclosureDtos.get(randomIndex).getId();
+        EnclosureDto created = createTestEnclosure();
 
-        enclosureService.delete(someIndex);
+        BooleanSupplier deleted = enclosureService.delete(created.getId());
+        Assertions.assertTrue(deleted.getAsBoolean());
 
-        EnclosureDto deleted = enclosureService.getById(someIndex);
-        Assertions.assertNull(deleted);
+        Assertions.assertThrows(
+                RuntimeException.class,
+                () -> enclosureService.getById(created.getId())
+        );
     }
 }

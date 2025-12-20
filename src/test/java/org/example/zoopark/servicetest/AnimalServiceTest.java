@@ -95,10 +95,12 @@ class AnimalServiceTest {
         AnimalDto created = createTestAnimal();
 
         BooleanSupplier deleted = animalService.delete(created.getId());
-        Assertions.assertTrue(deleted);
+        Assertions.assertTrue(deleted.getAsBoolean());
 
-        AnimalDto afterDelete = animalService.getById(created.getId());
-        Assertions.assertNull(afterDelete);
+        Assertions.assertThrows(
+                RuntimeException.class,
+                () -> animalService.getById(created.getId())
+        );
     }
 }
 

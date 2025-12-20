@@ -91,10 +91,12 @@ class KeeperServiceTest {
         KeeperDto created = createTestKeeper();
 
         BooleanSupplier deleted = keeperService.delete(created.getId());
-        Assertions.assertTrue(deleted);
+        Assertions.assertTrue(deleted.getAsBoolean());
 
-        KeeperDto afterDelete = keeperService.getById(created.getId());
-        Assertions.assertNull(afterDelete);
+        Assertions.assertThrows(
+                RuntimeException.class,
+                ()-> keeperService.getById(created.getId())
+        );
     }
 }
 
