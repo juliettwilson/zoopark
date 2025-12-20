@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public MyUserService userService(){
-        return new MyUserService();
+        return null;
     }
     @Bean
     public PasswordEncoder passwordEncoder(){
