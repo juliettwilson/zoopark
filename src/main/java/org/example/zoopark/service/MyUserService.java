@@ -1,11 +1,9 @@
 package org.example.zoopark.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.zoopark.entity.Permission;
 import org.example.zoopark.entity.UserModel;
 import org.example.zoopark.repository.PermissionRepository;
 import org.example.zoopark.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,37 +17,53 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class MyUserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private PermissionRepository permissionRepository;
+    private final UserRepository userRepository;
+    private final PermissionRepository permissionRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserModel user = userRepository.findByEmail(username);
-
-        if (Objects.nonNull(user)) {
-            return user;
-        }
-
+        if (user != null) return user;
         throw new UsernameNotFoundException("User not found");
     }
 
-
-    public void register(UserModel userModel) {
-        UserModel check = userRepository.findByEmail(userModel.getEmail());
-        if( check == null) {
+    public UserModel register(UserModel userModel) {
+        UserModel existing = userRepository.findByEmail(userModel.getEmail());
+        if (existing == null) {
             userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
-            List<Permission> permissions = List.of(permissionRepository.findByName("ROLE_USER"));
-
-            userModel.setPermissions(permissions);
-            userRepository.save(userModel);
+            userModel.setPermissions(List.of(permissionRepository.findByName("ROLE_USER")));
+            return userRepository.save(userModel);
         }
+        return existing;
     }
 
+    public List<UserModel> getAllUsers() {
+        return userRepository.findAll();
+    }
 
+    public UserModel getById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public UserModel update(Long id, UserModel userModel) {
+        UserModel user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setUsername(userModel.getUsername());
+        user.setEmail(userModel.getEmail());
+        if (userModel.getPassword() != null && !userModel.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userModel.getPassword()));
+        }
+
+        return userRepository.save(user);
+    }
+
+    public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found");
+        }
+        userRepository.deleteById(id);
+    }
 }
