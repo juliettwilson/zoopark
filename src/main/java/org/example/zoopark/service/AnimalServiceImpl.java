@@ -8,6 +8,7 @@ import org.example.zoopark.repository.AnimalRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -49,9 +50,10 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public void delete(Long id) {
+    public BooleanSupplier delete(Long id) {
         Animal existing = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Animal not found with id " + id));
         animalRepository.delete(existing);
+        return null;
     }
 }

@@ -11,5 +11,5 @@ public class EnclosureDto {
     private Long id;
     private String name;
     private String type;
-    private List<Long> animalIds;
+    private List<AnimalDto> animals;
 }

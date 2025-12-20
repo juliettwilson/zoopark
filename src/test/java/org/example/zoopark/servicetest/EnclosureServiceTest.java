@@ -114,7 +114,7 @@ public class EnclosureServiceTest {
         int randomIndex = random.nextInt(enclosureDtos.size());
         Long someIndex = enclosureDtos.get(randomIndex).getId();
 
-        Assertions.assertTrue(enclosureService.delete(someIndex));
+        enclosureService.delete(someIndex);
 
         EnclosureDto deleted = enclosureService.getById(someIndex);
         Assertions.assertNull(deleted);

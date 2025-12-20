@@ -1,6 +1,7 @@
 package org.example.zoopark.service;
 
 import org.example.zoopark.dto.AnimalDto;
+import org.example.zoopark.entity.Animal;
 
 import java.util.List;
 import java.util.function.BooleanSupplier;

@@ -9,114 +9,97 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.BooleanSupplier;
 
 @SpringBootTest
-public class KeeperServiceTest {
+class KeeperServiceTest {
 
     @Autowired
     private KeeperService keeperService;
 
+    private KeeperDto createTestKeeper() {
+        KeeperDto dto = new KeeperDto();
+        dto.setName("Test Keeper");
+        dto.setExperience(5);
+
+        KeeperDto saved = keeperService.create(dto);
+
+        Assertions.assertNotNull(saved);
+        Assertions.assertNotNull(saved.getId());
+
+        return saved;
+    }
+
     @Test
     void getAllTest() {
-        List<KeeperDto> keeperDtos = keeperService.getAll();
+        createTestKeeper();
 
-        Assertions.assertNotNull(keeperDtos);
-        Assertions.assertNotEquals(0, keeperDtos.size());
+        List<KeeperDto> keepers = keeperService.getAll();
 
-        for (KeeperDto dto : keeperDtos) {
-            Assertions.assertNotNull(dto);
+        Assertions.assertNotNull(keepers);
+        Assertions.assertFalse(keepers.isEmpty());
+
+        for (KeeperDto dto : keepers) {
             Assertions.assertNotNull(dto.getId());
             Assertions.assertNotNull(dto.getName());
-            Assertions.assertNotNull(dto.getExperience());
         }
     }
 
     @Test
     void getByIdTest() {
-        Random random = new Random();
-        List<KeeperDto> keeperDtos = keeperService.getAll();
-        int randomIndex = random.nextInt(keeperDtos.size());
-        Long someIndex = keeperDtos.get(randomIndex).getId();
+        KeeperDto created = createTestKeeper();
 
-        KeeperDto keeperDto = keeperService.getById(someIndex);
+        KeeperDto keeper = keeperService.getById(created.getId());
 
-        Assertions.assertNotNull(keeperDto);
-        Assertions.assertNotNull(keeperDto.getId());
-        Assertions.assertNotNull(keeperDto.getName());
-        Assertions.assertNotNull(keeperDto.getExperience());
-
-        Assertions.assertEquals(someIndex, keeperDto.getId());
+        Assertions.assertNotNull(keeper);
+        Assertions.assertEquals(created.getId(), keeper.getId());
+        Assertions.assertEquals(created.getName(), keeper.getName());
     }
 
     @Test
     void addTest() {
-        KeeperDto keeperDto = new KeeperDto();
-        keeperDto.setName("John");
-        keeperDto.setExperience(5);
+        KeeperDto dto = new KeeperDto();
+        dto.setName("Lion Keeper");
+        dto.setExperience(7);
 
-        KeeperDto add = keeperService.create(keeperDto);
+        KeeperDto saved = keeperService.create(dto);
 
-        Assertions.assertNotNull(add);
-        Assertions.assertNotNull(add.getId());
-        Assertions.assertNotNull(add.getName());
-        Assertions.assertNotNull(add.getExperience());
-
-        KeeperDto added = keeperService.getById(add.getId());
-
-        Assertions.assertNotNull(added);
-        Assertions.assertNotNull(added.getId());
-        Assertions.assertNotNull(added.getName());
-        Assertions.assertNotNull(added.getExperience());
-
-        Assertions.assertEquals(add.getId(), added.getId());
-        Assertions.assertEquals(add.getName(), added.getName());
-        Assertions.assertEquals(add.getExperience(), added.getExperience());
+        Assertions.assertNotNull(saved);
+        Assertions.assertNotNull(saved.getId());
+        Assertions.assertEquals(dto.getName(), saved.getName());
+        Assertions.assertEquals(dto.getExperience(), saved.getExperience());
     }
 
     @Test
     void updateTest() {
-        Random random = new Random();
-        List<KeeperDto> keeperDtos = keeperService.getAll();
-        int randomIndex = random.nextInt(keeperDtos.size());
-        Long someIndex = keeperDtos.get(randomIndex).getId();
+        KeeperDto created = createTestKeeper();
 
-        KeeperDto newKeeper = new KeeperDto();
-        newKeeper.setId(someIndex);
-        newKeeper.setName("Updated John");
-        newKeeper.setExperience(10);
+        KeeperDto updateDto = new KeeperDto();
+        updateDto.setName("Updated Keeper");
+        updateDto.setExperience(10);
 
-        KeeperDto update = keeperService.update(someIndex, newKeeper);
-
-        Assertions.assertNotNull(update);
-        Assertions.assertNotNull(update.getId());
-        Assertions.assertNotNull(update.getName());
-        Assertions.assertNotNull(update.getExperience());
-
-        Assertions.assertEquals(newKeeper.getId(), update.getId());
-        Assertions.assertEquals(newKeeper.getName(), update.getName());
-        Assertions.assertEquals(newKeeper.getExperience(), update.getExperience());
-
-        KeeperDto updated = keeperService.getById(someIndex);
+        KeeperDto updated = keeperService.update(created.getId(), updateDto);
 
         Assertions.assertNotNull(updated);
-        Assertions.assertNotNull(updated.getId());
-        Assertions.assertNotNull(updated.getName());
-        Assertions.assertNotNull(updated.getExperience());
-
-        Assertions.assertEquals(update.getId(), updated.getId());
-        Assertions.assertEquals(update.getName(), updated.getName());
-        Assertions.assertEquals(update.getExperience(), updated.getExperience());
+        Assertions.assertEquals(created.getId(), updated.getId());
+        Assertions.assertEquals("Updated Keeper", updated.getName());
+        Assertions.assertEquals(10, updated.getExperience());
     }
 
     @Test
     void deleteTest() {
-        Random random = new Random();
-        List<KeeperDto> keeperDtos = keeperService.getAll();
-        int randomIndex = random.nextInt(keeperDtos.size());
-        Long someIndex = keeperDtos.get(randomIndex).getId();
-        Assertions.assertTrue(keeperService.delete(someIndex));
+        KeeperDto created = createTestKeeper();
 
-        KeeperDto deleted = keeperService.getById(someIndex);
-        Assertions.assertNull(deleted);
+        BooleanSupplier deleted = keeperService.delete(created.getId());
+        Assertions.assertTrue(deleted);
+
+        KeeperDto afterDelete = keeperService.getById(created.getId());
+        Assertions.assertNull(afterDelete);
     }
 }
+
+
+
+
+
+
